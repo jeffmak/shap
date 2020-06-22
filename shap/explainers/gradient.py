@@ -28,7 +28,7 @@ class GradientExplainer(Explainer):
         ----------
         model : tf.keras.Model, (input : [tf.Tensor], output : tf.Tensor), torch.nn.Module, or a tuple
                 (model, layer), where both are torch.nn.Module objects
-            
+
             For TensorFlow this can be a model object, or a pair of TensorFlow tensors (or a list and
             a tensor) that specifies the input and output of the model to be explained. Note that for
             TensowFlow 2 you must pass a tensorflow function, not a tuple of input/output tensors).
@@ -90,7 +90,7 @@ class GradientExplainer(Explainer):
             maximum absolute value. If "custom" Then "ranked_outputs" contains a list of output nodes.
 
         rseed : None or int
-            Seeding the randomness in shap value computation  (background example choice, 
+            Seeding the randomness in shap value computation  (background example choice,
             interpolation between current and background example, smoothing).
 
         Returns
@@ -182,11 +182,11 @@ class _TFGradientExplainer(Explainer):
                             out = out[:,i]
 
                     x_grad = tape.gradient(out, x)
-                    
+
                     tf.keras.backend.set_learning_phase(phase)
-                    
+
                     return x_grad
-                
+
                 self.gradients[i] = grad_graph
 
         return self.gradients[i]
@@ -323,7 +323,7 @@ class _TFGradientExplainer(Explainer):
             for i in range(len(X)):
                 shape = list(self.model_inputs[i].shape)
                 shape[0] = -1
-                v = tf.constant(X[i].reshape(shape), dtype=self.model_inputs[i].dtype)
+                v = tf.constant(tf.reshape(X[i], shape), dtype=self.model_inputs[i].dtype)
                 inputs.append(v)
             return out(inputs)
 
@@ -529,7 +529,7 @@ class _PyTorchGradientExplainer(Explainer):
             if return_variances:
                 return output_phis[0], output_phi_vars[0]
             else:
-                return output_phis[0]            
+                return output_phis[0]
         elif ranked_outputs is not None:
             if return_variances:
                 return output_phis, output_phi_vars, model_output_ranks
